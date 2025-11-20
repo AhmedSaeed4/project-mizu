@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: AI Agent API
+  version: 1.0.0
+  description: API for interacting with the AI Agent backend.
+servers:
+  - url: http://localhost:8000
+    description: Local Development Server
+paths:
+  /agent:
+    post:
+      summary: Send a message to the AI Agent
+      operationId: postAgentMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentMessageRequest'
+      responses:
+        '200':
+          description: Successful response from the AI Agent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentMessageResponse'
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    AgentMessageRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: The message text sent to the AI agent.
+          example: "Tell me about your services."
+        userId:
+          type: string
+          description: Optional user ID for contextual conversations.
+          nullable: true
+          example: "user123"
+    AgentMessageResponse:
+      type: object
+      required:
+        - response
+      properties:
+        response:
+          type: string
+          description: The AI agent's text response.
+          example: "Hello! I am an AI assistant designed to help you with your personal brand portfolio."
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: A descriptive error message.
+          example: "Invalid input: 'text' field is required."
